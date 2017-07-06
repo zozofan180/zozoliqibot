@@ -1,0 +1,93 @@
+import requests
+import json
+import csv
+import sys
+
+print("Type Ticker of The ScamCoin Whose Data You Would Like to Check bat/myst/cf/nimiq/snm/ping")
+checker = input()
+if checker == 'bat':
+    r = requests.get('https://api.liqui.io/api/3/depth/bat_eth')
+    p = requests.get('https://api.liqui.io/api/3/ticker/bat_eth')
+    scamcoin_liqui = r.json()['bat_eth']['bids']
+    scamcoin_liqui_last = p.json()['bat_eth']['last']
+    print("At What Price Did You Purchase This Scamcoin?")
+    price_paid = input()
+elif checker == 'myst':
+    q = requests.get('https://api.liqui.io/api/3/depth/myst_eth')
+    s = requests.get('https://api.liqui.io/api/3/ticker/myst_eth')
+    scamcoin_liqui = q.json()['myst_eth']['bids']
+    scamcoin_liqui_last = s.json()['myst_eth']['last']
+    print("At What Price Did You Purchase This Scamcoin?")
+    price_paid = input()
+elif checker == 'cfi':
+    t = requests.get('https://api.liqui.io/api/3/depth/cfi_eth')
+    u = requests.get('https://api.liqui.io/api/3/ticker/cfi_eth')
+    scamcoin_liqui = t.json()['cfi_eth']['bids']
+    scamcoin_liqui_last = u.json()['cfi_eth']['last']
+    print("At What Price Did You Purchase This Scamcoin?")
+    price_paid = input()
+elif checker == 'nimiq':
+    f = requests.get('https://api.liqui.io/api/3/depth/nimiq_eth')
+    g = requests.get('https://api.liqui.io/api/3/ticker/nimiq_eth')
+    scamcoin_liqui = f.json()['nimiq_eth']['bids']
+    scamcoin_liqui_last = g.json()['nimiq_eth']['last']
+    print("At What Price Did You Purchase This Scamcoin?")
+    price_paid = input()
+elif checker == 'snm':
+    h = requests.get('https://api.liqui.io/api/3/depth/snm_eth')
+    i = requests.get('https://api.liqui.io/api/3/ticker/snm_eth')
+    scamcoin_liqui = h.json()['snm_eth']['bids']
+    scamcoin_liqui_last = i.json()['snm_eth']['last']
+    print("At What Price Did You Purchase This Scamcoin?")
+    price_paid = input()
+
+print(" ")
+print("Basic Tickers")
+print(scamcoin_liqui)
+print(scamcoin_liqui_last)
+print (" ")
+
+print("How much Scamcoin do you want to liquidate (# of Scamcoin)")
+liquidate_scamcoin = int(input())
+print("Set lowest price you would be comfortable with selling Scamcoin at")
+lowest_price = float(input())
+price = 0
+total = .00001
+average_price = 0
+loop = 0
+while loop < len(scamcoin_liqui):
+    if scamcoin_liqui[loop][0] < lowest_price:
+        average_price = price / total
+        break
+    if (total + scamcoin_liqui[loop][1]) > liquidate_scamcoin:
+        price += scamcoin_liqui[loop][0] * (scamcoin_liqui[loop][1] - (liquidate_scamcoin - total))
+        total += (scamcoin_liqui[loop][1] - (liquidate_scamcoin - total))
+        average_price = price / total
+        break
+    if loop == len(scamcoin_liqui)-1:
+        price += scamcoin_liqui[loop][0] * scamcoin_liqui[loop][1]
+        total += scamcoin_liqui[loop][1]
+        average_price = price / total
+        break
+    price += scamcoin_liqui[loop][0] * scamcoin_liqui[loop][1]
+    total += scamcoin_liqui[loop][1]
+    loop = loop + 1
+
+print(" ")
+print("THE DATA")
+print("Your Scamcoin of choice is.....")
+print(checker)
+print("Average Price in Eth if Entire Scamcoin Holdings On Liqui In One Order Above Your Price Point")
+print(average_price)
+print("Last Scamcoin Sale Price in Eth on Liqui")
+print(scamcoin_liqui_last)
+print("scamcoin Price You Paid")
+print(price_paid)
+
+
+
+
+
+
+
+
