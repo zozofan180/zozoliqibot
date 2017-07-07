@@ -2,52 +2,26 @@ import requests
 import json
 import csv
 import sys
+import getdepth
+import getticker
+import calc_liquidation_average
 
 print("Type Ticker of The ScamCoin Whose Data You Would Like to Check bat/myst/cf/nimiq/snm/ping")
 print("Input 0 for bat, 1 for myst, 2 for cfi, 3 for snm")
 checker = int(input())
 
-lq = 'https://api.liqui.io/api/3/ticker/'
-tickers = ['bat_eth', 'myst_eth', 'cfi_eth', 'snm_eth']
+scamcoin_liqui = getdepth.getdepth(checker)
+scamcoin_liqui_last = getticker.getticker(checker)
 
-r = requests.get('https://api.liqui.io/api/3/depth/'+tickers[checker])
-p = requests.get('https://api.liqui.io/api/3/ticker/'+tickers[checker])
-scamcoin_liqui = r.json()[tickers[checker]]['bids']
-scamcoin_liqui_last = p.json()[tickers[checker]]['last']
 print("At What Price Did You Purchase This Scamcoin?")
 price_paid = float(input())
-
-print(" ")
-print("Basic Tickers")
-print(scamcoin_liqui)
-print(scamcoin_liqui_last)
-print (" ")
 
 print("How much Scamcoin do you want to liquidate (# of Scamcoin)")
 liquidate_scamcoin = float(input())
 print("Set lowest price you would be comfortable with selling Scamcoin at")
 lowest_price = float(input())
-price = 0
-total = .00001
-average_price = 0
-loop = 0
-while loop < len(scamcoin_liqui):
-    if scamcoin_liqui[loop][0] < lowest_price:
-        average_price = price / total
-        break
-    if (total + scamcoin_liqui[loop][1]) > liquidate_scamcoin:
-        price += scamcoin_liqui[loop][0] * (scamcoin_liqui[loop][1] - (liquidate_scamcoin - total))
-        total += (scamcoin_liqui[loop][1] - (liquidate_scamcoin - total))
-        average_price = price / total
-        break
-    if loop == len(scamcoin_liqui)-1:
-        price += scamcoin_liqui[loop][0] * scamcoin_liqui[loop][1]
-        total += scamcoin_liqui[loop][1]
-        average_price = price / total
-        break
-    price += scamcoin_liqui[loop][0] * scamcoin_liqui[loop][1]
-    total += scamcoin_liqui[loop][1]
-    loop = loop + 1
+
+average_price = calc_liquidation_average.calc_liquidation_average(lowest_price, liquidate_scamcoin, scamcoin_liqui)
 
 print(" ")
 print("THE DATA")
@@ -60,11 +34,9 @@ print(scamcoin_liqui_last)
 print("Scamcoin Price You Paid")
 print(price_paid*1)
 print("Scamcoins That Would Be Sold At Market")
-print(liquidate_scamcoin-total)
+print("having trouble returning two variables")
 print("Eth Gained Or Lost From Liquidation")
 print((average_price*liquidate_scamcoin)-(price_paid*liquidate_scamcoin))
-
-
 
 
 
