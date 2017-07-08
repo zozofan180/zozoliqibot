@@ -1,0 +1,16 @@
+def print_data(checker, average_price, scamcoin_liqui_last,price_paid,total,liquidate_scamcoin):
+        print(" ")
+        print("THE DATA")
+        print("Your Scamcoin Of Choice is.....")
+        print(checker)
+        print("Average Price In Eth If Entire Scamcoin Holdings On Liqui In One Order Above Your Price Point")
+        print(average_price)
+        print("Last Scamcoin Sale Price In Eth On Liqui")
+        print(scamcoin_liqui_last)
+        print("Scamcoin Price You Paid")
+        print(price_paid * 1)
+        print("Total # Of Scamcoins That Would Be Sold At Market")
+        print(total)
+        print("Eth Gained Or Lost From Liquidation")
+        print((average_price * liquidate_scamcoin) - (price_paid * liquidate_scamcoin))
+        return
