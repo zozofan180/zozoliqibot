@@ -1,18 +1,11 @@
-import requests
-import json
-import csv
-import sys
-import getdepth
-import getticker
-import calc_liquidation_average
-import print_data
+import tuck_functions_away
 
 print("Type Ticker of The ScamCoin Whose Data You Would Like to Check bat/myst/cf/nimiq/snm/ping")
 print("Input 0 for bat, 1 for myst, 2 for cfi, 3 for snm")
 checker = int(input())
 
-scamcoin_liqui = getdepth.getdepth(checker)
-scamcoin_liqui_last = getticker.getticker(checker)
+scamcoin_liqui = tuck_functions_away.getdepth(checker)
+scamcoin_liqui_last = tuck_functions_away.getticker(checker)
 
 print("At What Price Did You Purchase This Scamcoin?")
 price_paid = float(input())
@@ -22,12 +15,11 @@ liquidate_scamcoin = float(input())
 print("Set lowest price you would be comfortable with selling Scamcoin at")
 lowest_price = float(input())
 
-returned_variables = calc_liquidation_average.calc_liquidation_average(lowest_price, liquidate_scamcoin, scamcoin_liqui)
+returned_variables = tuck_functions_away.calc_liquidation_average(lowest_price, liquidate_scamcoin, scamcoin_liqui)
 average_price = returned_variables[0]
 total = returned_variables[1]
 
-print_data.print_data(checker, average_price, scamcoin_liqui_last,price_paid,total,liquidate_scamcoin)
-
+tuck_functions_away.print_data(checker, average_price, scamcoin_liqui_last,price_paid,total,liquidate_scamcoin)
 
 
 
