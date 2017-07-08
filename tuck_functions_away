@@ -1,0 +1,53 @@
+import requests
+
+def calc_liquidation_average(lowest_price, liquidate_scamcoin, scamcoin_liqui):
+    price = 0
+    total = .00001
+    average_price = 0
+
+    for loop in range (0,len(scamcoin_liqui)):
+        if scamcoin_liqui[loop][0] < lowest_price:
+            average_price = price / total
+            break
+        if (total + scamcoin_liqui[loop][1]) > liquidate_scamcoin:
+            price += scamcoin_liqui[loop][0] * (scamcoin_liqui[loop][1] - (liquidate_scamcoin - total))
+            total += (scamcoin_liqui[loop][1] - (liquidate_scamcoin - total))
+            average_price = price / total
+            break
+        if loop == len(scamcoin_liqui) - 1:
+            price += scamcoin_liqui[loop][0] * scamcoin_liqui[loop][1]
+            total += scamcoin_liqui[loop][1]
+            average_price = price / total
+            break
+        price += scamcoin_liqui[loop][0] * scamcoin_liqui[loop][1]
+        total += scamcoin_liqui[loop][1]
+    return average_price, total
+
+def getdepth(checker):
+    tickers = ['bat_eth', 'myst_eth', 'cfi_eth', 'snm_eth']
+    r = requests.get('https://api.liqui.io/api/3/depth/' + tickers[checker])
+    scamcoin_liqui = r.json()[tickers[checker]]['bids']
+    return scamcoin_liqui
+
+def getticker(checker):
+    tickers = ['bat_eth', 'myst_eth', 'cfi_eth', 'snm_eth']
+    p = requests.get('https://api.liqui.io/api/3/ticker/' + tickers[checker])
+    scamcoin_liqui_last = p.json()[tickers[checker]]['last']
+    return scamcoin_liqui_last
+
+def print_data(checker, average_price, scamcoin_liqui_last, price_paid, total, liquidate_scamcoin):
+    print(" ")
+    print("THE DATA")
+    print("Your Scamcoin Of Choice is.....")
+    print(checker)
+    print("Average Price In Eth If Entire Scamcoin Holdings On Liqui In One Order Above Your Price Point")
+    print(average_price)
+    print("Last Scamcoin Sale Price In Eth On Liqui")
+    print(scamcoin_liqui_last)
+    print("Scamcoin Price You Paid")
+    print(price_paid * 1)
+    print("Total # Of Scamcoins That Would Be Sold At Market")
+    print(total)
+    print("Eth Gained Or Lost From Liquidation")
+    print((average_price * liquidate_scamcoin) - (price_paid * liquidate_scamcoin))
+    return
