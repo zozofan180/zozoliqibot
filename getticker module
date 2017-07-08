@@ -1,7 +1,0 @@
-
-def getticker(checker):
-    import requests
-    tickers = ['bat_eth', 'myst_eth', 'cfi_eth', 'snm_eth']
-    p = requests.get('https://api.liqui.io/api/3/ticker/' + tickers[checker])
-    scamcoin_liqui_last = p.json()[tickers[checker]]['last']
-    return scamcoin_liqui_last
