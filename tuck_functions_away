@@ -8,8 +8,6 @@ def calc_liquidation_average(lowest_price, liquidate_scamcoin, scamcoin_liqui):
     for loop in range (0,len(scamcoin_liqui)):
         if (total + scamcoin_liqui[loop][1]) > liquidate_scamcoin:
             price += scamcoin_liqui[loop][0] * (liquidate_scamcoin - total)
-            print(liquidate_scamcoin)
-            print(total)
             total += (liquidate_scamcoin - total)
             average_price = price / total
             return average_price, total
