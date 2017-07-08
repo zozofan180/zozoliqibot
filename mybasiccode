@@ -1,4 +1,5 @@
 import tuck_functions_away
+import schedule, time
 
 print("Type Ticker of The ScamCoin Whose Data You Would Like to Check bat/myst/cf/nimiq/snm/ping")
 print("Input 0 for bat, 1 for myst, 2 for cfi, 3 for snm")
@@ -15,11 +16,17 @@ liquidate_scamcoin = float(input())
 print("Set lowest price you would be comfortable with selling Scamcoin at")
 lowest_price = float(input())
 
-returned_variables = tuck_functions_away.calc_liquidation_average(lowest_price, liquidate_scamcoin, scamcoin_liqui)
-average_price = returned_variables[0]
-total = returned_variables[1]
+def job():
+    returned_variables = tuck_functions_away.calc_liquidation_average(lowest_price, liquidate_scamcoin, scamcoin_liqui)
+    average_price = returned_variables[0]
+    total = returned_variables[1]
+    tuck_functions_away.print_data(checker, average_price, scamcoin_liqui_last,price_paid,total,liquidate_scamcoin)
 
-tuck_functions_away.print_data(checker, average_price, scamcoin_liqui_last,price_paid,total,liquidate_scamcoin)
+schedule.every(5).seconds.do(job)
+
+while 1:
+    schedule.run_pending()
+    time.sleep(1)
 
 
 
