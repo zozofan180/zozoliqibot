@@ -21,14 +21,14 @@ def calc_liquidation_average(lowest_price, liquidate_scamcoin, scamcoin_liqui):
             total += scamcoin_liqui[loop][1]
             average_price = price / total
             return average_price, total
-    price += scamcoin_liqui[loop][0] * scamcoin_liqui[loop][1]
-    total += scamcoin_liqui[loop][1]
+        price += scamcoin_liqui[loop][0] * scamcoin_liqui[loop][1]
+        total += scamcoin_liqui[loop][1]
     return average_price, total
 
 
 def get_depth(checker):
     tickers = ['bat_eth', 'myst_eth', 'cfi_eth', 'snm_eth']
-    r = requests.get('https://api.liqui.io/api/3/depth/' + tickers[checker])
+    r = requests.get("https://api.liqui.io/api/3/depth/" + tickers[checker])
     scamcoin_liqui = r.json()[tickers[checker]]['bids']
     return scamcoin_liqui
 
