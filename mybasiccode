@@ -21,7 +21,9 @@ liquidate_scamcoin = float(input())
 print("Set lowest price you would be comfortable with selling Scamcoin at")
 lowest_price = float(input())
 
-average_price = calc_liquidation_average.calc_liquidation_average(lowest_price, liquidate_scamcoin, scamcoin_liqui)
+returned_variables = calc_liquidation_average.calc_liquidation_average(lowest_price, liquidate_scamcoin, scamcoin_liqui)
+average_price = returned_variables[0]
+total = returned_variables[1]
 
 print(" ")
 print("THE DATA")
@@ -33,10 +35,12 @@ print("Last Scamcoin Sale Price In Eth On Liqui")
 print(scamcoin_liqui_last)
 print("Scamcoin Price You Paid")
 print(price_paid*1)
-print("Scamcoins That Would Be Sold At Market")
-print("having trouble returning two variables")
+print("Total # Of Scamcoins That Would Be Sold At Market")
+print(total)
 print("Eth Gained Or Lost From Liquidation")
 print((average_price*liquidate_scamcoin)-(price_paid*liquidate_scamcoin))
+
+
 
 
 
