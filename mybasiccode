@@ -5,6 +5,7 @@ import sys
 import getdepth
 import getticker
 import calc_liquidation_average
+import print_data
 
 print("Type Ticker of The ScamCoin Whose Data You Would Like to Check bat/myst/cf/nimiq/snm/ping")
 print("Input 0 for bat, 1 for myst, 2 for cfi, 3 for snm")
@@ -25,20 +26,8 @@ returned_variables = calc_liquidation_average.calc_liquidation_average(lowest_pr
 average_price = returned_variables[0]
 total = returned_variables[1]
 
-print(" ")
-print("THE DATA")
-print("Your Scamcoin Of Choice is.....")
-print(checker)
-print("Average Price In Eth If Entire Scamcoin Holdings On Liqui In One Order Above Your Price Point")
-print(average_price)
-print("Last Scamcoin Sale Price In Eth On Liqui")
-print(scamcoin_liqui_last)
-print("Scamcoin Price You Paid")
-print(price_paid*1)
-print("Total # Of Scamcoins That Would Be Sold At Market")
-print(total)
-print("Eth Gained Or Lost From Liquidation")
-print((average_price*liquidate_scamcoin)-(price_paid*liquidate_scamcoin))
+print_data.print_data(checker, average_price, scamcoin_liqui_last,price_paid,total,liquidate_scamcoin)
+
 
 
 
