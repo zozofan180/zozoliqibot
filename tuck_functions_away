@@ -2,25 +2,26 @@ import requests
 
 def calc_liquidation_average(lowest_price, liquidate_scamcoin, scamcoin_liqui):
     price = 0
-    total = .00001
+    total = 1
     average_price = 0
-
     for loop in range (0,len(scamcoin_liqui)):
-        if scamcoin_liqui[loop][0] < lowest_price:
-            average_price = price / total
-            break
         if (total + scamcoin_liqui[loop][1]) > liquidate_scamcoin:
-            price += scamcoin_liqui[loop][0] * (scamcoin_liqui[loop][1] - (liquidate_scamcoin - total))
-            total += (scamcoin_liqui[loop][1] - (liquidate_scamcoin - total))
+            price += scamcoin_liqui[loop][0] * (liquidate_scamcoin - total)
+            print(liquidate_scamcoin)
+            print(total)
+            total += (liquidate_scamcoin - total)
             average_price = price / total
-            break
+            return average_price, total
+        if scamcoin_liqui[loop][0] < lowest_price:
+                average_price = price / total
+                return average_price, total
         if loop == len(scamcoin_liqui) - 1:
             price += scamcoin_liqui[loop][0] * scamcoin_liqui[loop][1]
             total += scamcoin_liqui[loop][1]
             average_price = price / total
-            break
-        price += scamcoin_liqui[loop][0] * scamcoin_liqui[loop][1]
-        total += scamcoin_liqui[loop][1]
+            return average_price, total
+    price += scamcoin_liqui[loop][0] * scamcoin_liqui[loop][1]
+    total += scamcoin_liqui[loop][1]
     return average_price, total
 
 def getdepth(checker):
