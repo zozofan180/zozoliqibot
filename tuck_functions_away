@@ -1,5 +1,6 @@
 import requests
 
+
 def calc_liquidation_average(lowest_price, liquidate_scamcoin, scamcoin_liqui):
     price = 0
     total = 1
@@ -24,17 +25,20 @@ def calc_liquidation_average(lowest_price, liquidate_scamcoin, scamcoin_liqui):
     total += scamcoin_liqui[loop][1]
     return average_price, total
 
-def getdepth(checker):
+
+def get_depth(checker):
     tickers = ['bat_eth', 'myst_eth', 'cfi_eth', 'snm_eth']
     r = requests.get('https://api.liqui.io/api/3/depth/' + tickers[checker])
     scamcoin_liqui = r.json()[tickers[checker]]['bids']
     return scamcoin_liqui
 
-def getticker(checker):
+
+def get_ticker(checker):
     tickers = ['bat_eth', 'myst_eth', 'cfi_eth', 'snm_eth']
     p = requests.get('https://api.liqui.io/api/3/ticker/' + tickers[checker])
     scamcoin_liqui_last = p.json()[tickers[checker]]['last']
     return scamcoin_liqui_last
+
 
 def print_data(checker, average_price, scamcoin_liqui_last, price_paid, total, liquidate_scamcoin):
     print(" ")
