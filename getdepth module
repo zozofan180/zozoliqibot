@@ -1,7 +1,0 @@
-import requests
-def getdepth(checker):
-    tickers = ['bat_eth', 'myst_eth', 'cfi_eth', 'snm_eth']
-    r = requests.get('https://api.liqui.io/api/3/depth/' + tickers[checker])
-    scamcoin_liqui = r.json()[tickers[checker]]['bids']
-    return scamcoin_liqui
-
