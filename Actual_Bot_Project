@@ -1,58 +1,29 @@
-import requests
 import schedule, time
-
-lq_one_tickers = ['ETH-BAT', 'ETH-MYST', 'ETH-CFI', 'ETH-TKN']
-lq_two_tickers = ['bat_eth', 'myst_eth', 'cfi_eth', 'tkn_eth']
-lq_one = 'https://bittrex.com/api/v1.1/public/getorderbook?market='
-lq_one_additional = '&type=both&depth=5'
-lq_two = 'https://api.liqui.io/api/3/depth/'
+import functions_folder_actual_bot
 
 
 checker = int(input())
 
-r = requests.get('https://bittrex.com/api/v1.1/public/getorderbook?market='+lq_one_tickers[checker]+lq_one_additional)
-p = requests.get('https://api.liqui.io/api/3/depth/'+lq_two_tickers[checker])
-bittrex_market_orders = r.json()['result']['buy']
-liqui_market_orders = p.json()[lq_two_tickers[checker]]['asks']
-print(bittrex_market_orders)
-print(liqui_market_orders)
-
 
 def job():
-    if liqui_market_orders[0][0] * liqui_market_orders[0][1] > .10:
-        liqui_amount = float(liqui_market_orders[0][1])
-        liqui_average = float(liqui_market_orders[0][0])
-        liqui_total_eth = float(liqui_market_orders[0][1] * liqui_market_orders[0][1])
-        liqui_transaction_fees = float(liqui_total_eth * .025)
-
-        bittrex_amount = float(bittrex_market_orders[0]['Quantity'])
-        bittrex_average = float(bittrex_market_orders[0]['Rate'])
-        bittrex_total_eth = float(bittrex_market_orders[0]['Quantity'] * bittrex_market_orders[0]['Rate'])
-        bittrex_transaction_fees = float(bittrex_total_eth * .025)
-
-        if bittrex_average > liqui_average:
-            if bittrex_amount - liqui_amount >= 0:
-                if float(bittrex_total_eth - (liqui_total_eth+  liqui_transaction_fees+bittrex_transaction_fees)) > 0:
-                    eth_gained = float(bittrex_total_eth - (liqui_total_eth+liqui_transaction_fees+bittrex_transaction_fees))
-                    print("buy on liqui, sell on bittrex")
-                    print("eth gained =", eth_gained)
-
-        if bittrex_average < liqui_average:
-            if liqui_amount - bittrex_amount >= 0:
-                if float(liqui_total_eth - (bittrex_total_eth+liqui_transaction_fees+bittrex_transaction_fees)) > 0:
-                    eth_gained = float(liqui_total_eth - (bittrex_total_eth+liqui_transaction_fees+bittrex_transaction_fees))
-                    print("make trade NOW ASAP NOW")
-                    print("eth gained =", eth_gained)
-        print(bittrex_average)
-        print(bittrex_amount)
-        print(liqui_average)
-        print(liqui_amount)
+    liqui_market_orders = functions_folder_actual_bot.get_liqui_data(checker)
+    bittrex_market_orders = functions_folder_actual_bot.get_bittrex_data(checker)
+    liqui_data = functions_folder_actual_bot.check_liqui_data(liqui_market_orders)
+    bittrex_data = functions_folder_actual_bot.check_bittrex_data(bittrex_market_orders)
+    functions_folder_actual_bot.compare_data(liqui_data, bittrex_data)
 
 schedule.every(2).seconds.do(job)
 
 while 1:
     schedule.run_pending()
     time.sleep(1)
+
+
+
+
+
+
+
 
 
 
