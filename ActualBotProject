@@ -37,7 +37,7 @@ def job():
                     print("buy on liqui, sell on bittrex")
                     print("eth gained =", eth_gained)
 
-        if bittrex_average > liqui_average:
+        if bittrex_average < liqui_average:
             if liqui_amount - bittrex_amount >= 0:
                 if float(liqui_total_eth - (bittrex_total_eth+liqui_transaction_fees+bittrex_transaction_fees)) > 0:
                     eth_gained = float(liqui_total_eth - (bittrex_total_eth+liqui_transaction_fees+bittrex_transaction_fees))
