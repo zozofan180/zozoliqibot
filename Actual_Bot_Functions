@@ -1,0 +1,54 @@
+import requests
+
+
+def get_liqui_data(checker):
+    lq_two_tickers = ['bat_eth', 'myst_eth', 'cfi_eth', 'pay_eth']
+    p = requests.get('https://api.liqui.io/api/3/depth/' + lq_two_tickers[checker])
+    liqui_market_orders = p.json()[lq_two_tickers[checker]]['asks']
+    return liqui_market_orders
+
+
+def get_bittrex_data(checker):
+    bittrex_tickers = ['ETH-BAT', 'ETH-MYST', 'ETH-CFI', 'ETH-PAY']
+    r = requests.get('https://bittrex.com/api/v1.1/public/getorderbook?market='
+                     + bittrex_tickers[checker] +
+                     '&type=both&depth=5')
+    bittrex_market_orders = r.json()['result']['buy']
+    return bittrex_market_orders
+
+
+def check_liqui_data(liqui_market_orders):
+    liqui_first_order_average = liqui_market_orders[0][0]
+    liqui_first_order_amount = liqui_market_orders[0][1]
+    liqui_first_order_eth_amount = liqui_market_orders[0][0] * liqui_market_orders[0][1]
+    liqui_first_order_transaction_costs = liqui_first_order_eth_amount *.025
+    liqui_second_order_average = liqui_market_orders[1][0]
+    liqui_second_order_amount = liqui_market_orders[1][1]
+    liqui_second_order_eth_amount = liqui_market_orders[1][0] * liqui_market_orders[1][1]
+    liqui_second_order_transaction_costs = liqui_first_order_eth_amount *.025
+    liqui_data = [liqui_first_order_average, liqui_first_order_amount, liqui_first_order_eth_amount,
+                  liqui_first_order_eth_amount, liqui_first_order_transaction_costs,
+                  liqui_second_order_average,liqui_second_order_amount,
+                  liqui_second_order_eth_amount,liqui_second_order_transaction_costs]
+    return liqui_data
+
+
+def check_bittrex_data(bittrex_market_orders):
+    bittrex_first_order_average = bittrex_market_orders[0]['Rate']
+    bittrex_first_order_amount = bittrex_market_orders[0]['Quantity']
+    bittrex_first_order_eth_amount = bittrex_market_orders[0]['Quantity'] * bittrex_market_orders[0]['Rate']
+    bittrex_first_order_transaction_costs = bittrex_first_order_eth_amount *.025
+    bittrex_second_order_average = bittrex_market_orders[1]['Rate']
+    bittrex_second_order_amount = bittrex_market_orders[1]['Quantity']
+    bittrex_second_order_eth_amount = bittrex_market_orders[1]['Rate'] * bittrex_market_orders[1]['Quantity']
+    bittrex_second_order_transaction_costs = bittrex_first_order_eth_amount * .025
+    bittrex_data = [bittrex_first_order_average, bittrex_first_order_amount, bittrex_first_order_eth_amount,
+                    bittrex_first_order_eth_amount, bittrex_first_order_transaction_costs, bittrex_second_order_average,
+                    bittrex_second_order_amount,bittrex_second_order_eth_amount,
+                    bittrex_second_order_transaction_costs]
+    return bittrex_data
+
+
+def compare_data(liqui_data, bittrex_data):
+    print(liqui_data)
+    print(bittrex_data)
