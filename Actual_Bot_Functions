@@ -18,37 +18,35 @@ def get_bittrex_data(checker):
 
 
 def check_liqui_data(liqui_market_orders):
-    liqui_first_order_average = liqui_market_orders[0][0]
-    liqui_first_order_amount = liqui_market_orders[0][1]
-    liqui_first_order_eth_amount = liqui_market_orders[0][0] * liqui_market_orders[0][1]
-    liqui_first_order_transaction_costs = liqui_first_order_eth_amount *.025
-    liqui_second_order_average = liqui_market_orders[1][0]
-    liqui_second_order_amount = liqui_market_orders[1][1]
-    liqui_second_order_eth_amount = liqui_market_orders[1][0] * liqui_market_orders[1][1]
-    liqui_second_order_transaction_costs = liqui_first_order_eth_amount *.025
-    liqui_data = [liqui_first_order_average, liqui_first_order_amount, liqui_first_order_eth_amount,
-                  liqui_first_order_eth_amount, liqui_first_order_transaction_costs,
-                  liqui_second_order_average,liqui_second_order_amount,
-                  liqui_second_order_eth_amount,liqui_second_order_transaction_costs]
+    liqui_first_order_average = float(liqui_market_orders[0][0])
+    liqui_first_order_amount = float(liqui_market_orders[0][1])
+    liqui_first_order_transaction_costs = float((liqui_first_order_amount *.025) * 2)
+    liqui_data = [liqui_first_order_average, liqui_first_order_amount,
+                  liqui_first_order_transaction_costs]
     return liqui_data
 
 
 def check_bittrex_data(bittrex_market_orders):
-    bittrex_first_order_average = bittrex_market_orders[0]['Rate']
-    bittrex_first_order_amount = bittrex_market_orders[0]['Quantity']
-    bittrex_first_order_eth_amount = bittrex_market_orders[0]['Quantity'] * bittrex_market_orders[0]['Rate']
-    bittrex_first_order_transaction_costs = bittrex_first_order_eth_amount *.025
-    bittrex_second_order_average = bittrex_market_orders[1]['Rate']
-    bittrex_second_order_amount = bittrex_market_orders[1]['Quantity']
-    bittrex_second_order_eth_amount = bittrex_market_orders[1]['Rate'] * bittrex_market_orders[1]['Quantity']
-    bittrex_second_order_transaction_costs = bittrex_first_order_eth_amount * .025
-    bittrex_data = [bittrex_first_order_average, bittrex_first_order_amount, bittrex_first_order_eth_amount,
-                    bittrex_first_order_eth_amount, bittrex_first_order_transaction_costs, bittrex_second_order_average,
-                    bittrex_second_order_amount,bittrex_second_order_eth_amount,
-                    bittrex_second_order_transaction_costs]
+    bittrex_first_order_average = float(bittrex_market_orders[0]['Rate'])
+    bittrex_first_order_amount = float(bittrex_market_orders[0]['Quantity'])
+    bittrex_data = [bittrex_first_order_average, bittrex_first_order_amount]
     return bittrex_data
 
 
-def compare_data(liqui_data, bittrex_data):
-    print(liqui_data)
-    print(bittrex_data)
+def compare_data(liqui_data, bittrex_data, checker):
+    ticker = ['BAT','MYST',"CFI","PAY"]
+
+    if liqui_data[0] < bittrex_data[0]:
+        if liqui_data[1] < bittrex_data[1]:
+                print("BUY "+ str(liqui_data[1]) + " OF " + ticker[checker] + " AT " + str(liqui_data[0]) + " ON LIQUI")
+                print("SELL " + str(liqui_data[1]) + " OF " + ticker[checker] + " AT " + str(bittrex_data[0]) + " ON BITTREX")
+        else:
+            print("BUY " + str(bittrex_data[1]) + " OF " + ticker[checker] + " AT " + str(liqui_data[0]) + " ON LIQUI")
+            print("SELL " + str(bittrex_data[1]) + " OF " + ticker[checker] + " AT " + str(bittrex_data[0]) + " ON BITTREX")
+    else:
+        if liqui_data[1] < bittrex_data[1]:
+            print("SELL " + str(liqui_data[1]) + " OF " + ticker[checker] + " AT " + str(liqui_data[0]) + " ON LIQUI")
+            print("BUY " + str(liqui_data[1]) + " OF " + ticker[checker] + " AT " + str(bittrex_data[0]) + " ON BITTREX")
+        else:
+            print("SELL " + str(bittrex_data[1]) + " OF " + ticker[checker] + " AT " + str(liqui_data[0]) + " ON LIQUI")
+            print("BUY " + str(bittrex_data[1]) + " OF " + ticker[checker] + " AT " + str(bittrex_data[0]) + " ON BITTREX")
