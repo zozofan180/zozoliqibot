@@ -20,7 +20,7 @@ def get_bittrex_data(checker):
 def check_liqui_data(liqui_market_orders):
     liqui_first_order_average = float(liqui_market_orders[0][0])
     liqui_first_order_amount = float(liqui_market_orders[0][1])
-    liqui_first_order_transaction_costs = float((liqui_first_order_amount *.025) * 2)
+    liqui_first_order_transaction_costs = float((liqui_first_order_amount * .001) * 2)
     liqui_data = [liqui_first_order_average, liqui_first_order_amount,
                   liqui_first_order_transaction_costs]
     return liqui_data
@@ -29,7 +29,9 @@ def check_liqui_data(liqui_market_orders):
 def check_bittrex_data(bittrex_market_orders):
     bittrex_first_order_average = float(bittrex_market_orders[0]['Rate'])
     bittrex_first_order_amount = float(bittrex_market_orders[0]['Quantity'])
-    bittrex_data = [bittrex_first_order_average, bittrex_first_order_amount]
+    bittrex_data_first_order_transaction_costs = ((bittrex_first_order_amount * .001) * 2)
+    bittrex_data = [bittrex_first_order_average, bittrex_first_order_amount,
+                    bittrex_data_first_order_transaction_costs]
     return bittrex_data
 
 
@@ -38,15 +40,27 @@ def compare_data(liqui_data, bittrex_data, checker):
 
     if liqui_data[0] < bittrex_data[0]:
         if liqui_data[1] < bittrex_data[1]:
+            if ((bittrex_data[0]*liqui_data[1]) - (liqui_data[0]*liqui_data[1])) - (liqui_data[0]*liqui_data[2]) > 0:
                 print("BUY "+ str(liqui_data[1]) + " OF " + ticker[checker] + " AT " + str(liqui_data[0]) + " ON LIQUI")
                 print("SELL " + str(liqui_data[1]) + " OF " + ticker[checker] + " AT " + str(bittrex_data[0]) + " ON BITTREX")
+                print_tickers = "YES"
+                return print_tickers
         else:
-            print("BUY " + str(bittrex_data[1]) + " OF " + ticker[checker] + " AT " + str(liqui_data[0]) + " ON LIQUI")
-            print("SELL " + str(bittrex_data[1]) + " OF " + ticker[checker] + " AT " + str(bittrex_data[0]) + " ON BITTREX")
+            if ((bittrex_data[0]*bittrex_data[1]) - (liqui_data[0]*bittrex_data[1])) - (liqui_data[0]*bittrex_data[2]) > 0:
+                print("BUY " + str(bittrex_data[1]) + " OF " + ticker[checker] + " AT " + str(liqui_data[0]) + " ON LIQUI")
+                print("SELL " + str(bittrex_data[1]) + " OF " + ticker[checker] + " AT " + str(bittrex_data[0]) + " ON BITTREX")
+                print_tickers = "YES"
+                return print_tickers
     else:
         if liqui_data[1] < bittrex_data[1]:
-            print("SELL " + str(liqui_data[1]) + " OF " + ticker[checker] + " AT " + str(liqui_data[0]) + " ON LIQUI")
-            print("BUY " + str(liqui_data[1]) + " OF " + ticker[checker] + " AT " + str(bittrex_data[0]) + " ON BITTREX")
+            if ((liqui_data[0]*liqui_data[1]) - (bittrex_data[0]*liqui_data[1])) - (liqui_data[0]*liqui_data[2]) > 0:
+                print("SELL " + str(liqui_data[1]) + " OF " + ticker[checker] + " AT " + str(liqui_data[0]) + " ON LIQUI")
+                print("BUY " + str(liqui_data[1]) + " OF " + ticker[checker] + " AT " + str(bittrex_data[0]) + " ON BITTREX")
+                print_tickers = "YES"
+                return print_tickers
         else:
-            print("SELL " + str(bittrex_data[1]) + " OF " + ticker[checker] + " AT " + str(liqui_data[0]) + " ON LIQUI")
-            print("BUY " + str(bittrex_data[1]) + " OF " + ticker[checker] + " AT " + str(bittrex_data[0]) + " ON BITTREX")
+            if ((liqui_data[0]*bittrex_data[1]) - (bittrex_data[0]*bittrex_data[1])) - (liqui_data[0]*bittrex_data[2]) > 0:
+                print("SELL " + str(bittrex_data[1]) + " OF " + ticker[checker] + " AT " + str(liqui_data[0]) + " ON LIQUI")
+                print("BUY " + str(bittrex_data[1]) + " OF " + ticker[checker] + " AT " + str(bittrex_data[0]) + " ON BITTREX")
+                print_tickers = "YES"
+                return print_tickers
