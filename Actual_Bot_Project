@@ -10,16 +10,22 @@ def job():
     bittrex_market_orders = functions_folder_actual_bot.get_bittrex_data(checker)
     liqui_data = functions_folder_actual_bot.check_liqui_data(liqui_market_orders)
     bittrex_data = functions_folder_actual_bot.check_bittrex_data(bittrex_market_orders)
-    print(liqui_data)
-    print(bittrex_data)
-    functions_folder_actual_bot.compare_data(liqui_data, bittrex_data, checker)
-
-
+    print_tickers = functions_folder_actual_bot.compare_data(liqui_data, bittrex_data, checker)
+    if print_tickers == "YES":
+        print("This is liqui data string")
+        print(liqui_data)
+        print("This is bittrex data string")
+        print(bittrex_data)
+    print("FRESH TRADE")
+    print(" ")
 schedule.every(2).seconds.do(job)
 
 while 1:
     schedule.run_pending()
     time.sleep(1)
+
+
+
 
 
 
