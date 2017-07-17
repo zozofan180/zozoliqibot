@@ -17,8 +17,8 @@ def get_info():
               "nonce": nonce}
 
     parms = urllib.parse.urlencode(parms)
-    key_bytes = bytes(api_secret, 'latin-1')
-    hashed = hmac.new(key_bytes, digestmod=hashlib.sha512)
+    secret_bytes = bytes(api_secret, 'latin-1')
+    hashed = hmac.new(secret_bytes, digestmod=hashlib.sha512)
     signature = hashed.hexdigest()
 
     headers = {"Content-type":"application/x-www-form-urlencoded",
@@ -27,5 +27,4 @@ def get_info():
     conn = http.client.HTTPConnection("api.liqui.io")
     conn.request("POST","/tapi", parms,headers)
     response = conn.getresponse()
-    if response.status == 200:
-        print("ITS WORKING")
+    print(response)
