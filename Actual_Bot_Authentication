@@ -25,10 +25,7 @@ def get_info():
                "Key":api_key,
                "Signature": sign}
     conn = http.client.HTTPSConnection("api.liqui.io")
-    print("1")
     conn.request("POST", "/tapi", parms, headers)
-    print("1")
     response = conn.getresponse()
-    print("1")
     print(response.status,response.reason)
     conn.close()
