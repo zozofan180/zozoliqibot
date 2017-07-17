@@ -1,7 +1,9 @@
 import schedule, time
 import functions_folder_actual_bot
+import authentication
 
 
+authentication.get_info()
 checker = int(input())
 
 
@@ -23,6 +25,13 @@ schedule.every(2).seconds.do(job)
 while 1:
     schedule.run_pending()
     time.sleep(1)
+
+
+
+
+
+
+
 
 
 
