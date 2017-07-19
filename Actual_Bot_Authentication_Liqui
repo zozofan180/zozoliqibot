@@ -7,8 +7,8 @@ from hashlib import sha512
 import hmac
 import time
 
-api_key = 'I1JJ35PJ-VIO9KBDR-RSB5LJU7-9C56CE6J-GKEYC6FV'
-api_secret = '1cfbf871a5d3c14771dce148def06e9fb1e262c8d0d6cb212f04fe8318681448'
+api_key = ''
+api_secret = ''
 
 
 def get_info():
